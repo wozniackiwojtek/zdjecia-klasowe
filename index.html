@@ -31,6 +31,23 @@
             padding: 8px;
             width: 220px;
         }
+	
+    	.center {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-align: center;
+            min-width: 260px;
+        }
+	
         figure:hover {
             border-color: #007acc;
         }
@@ -51,6 +68,17 @@
     </style>
 </head>
 <body>
+
+<div class="center">
+    <form id="loginForm" class="login-box">
+        <h2>Podaj hasło</h2>
+        <input type="password" id="password" placeholder="Hasło" autofocus>
+        <button type="submit">Zaloguj</button>
+        <p id="error"></p>
+    </form>
+</div>
+
+<div id="content" style="display:none;">
     <h1>Galeria 5A</h1>
     <p>Kliknij miniaturkę, aby zobaczyć zdjęcie w pełnym rozmiarze.</p>
     
@@ -63,30 +91,55 @@
         </figure>
 
         <figure>
-            <a href="https://photos.app.goo.gl/4JGAanhuCNb4rvcTA" target="_blank">
+            <a href="https://photos.google.com/album/AF1QipNPPZsFosT3M8BAeg_Vf9D1EfdRQJrY7jD56qIQ" target="_blank">
                 <img src="https://lh3.googleusercontent.com/pw/AP1GczPcYh27zhbyOndpEWVLROcVYPuyTgaYa_1dax7bq5rjNs7BoRnD7oLuuy5rFEij3SITb4jNWZrodwMhaFnwMlzV5TMINs3gED5_oj2mxYutoGQS38hg_X9lCVN7lUu21sNqjHI530iHEbfiYnJw3V7q=w1367-h911-s-no-gm?authuser=0" alt="Miasto">
             </a>
             <figcaption>[2025-10-14] Muzeum Elektroniki</figcaption>
         </figure>
 
         <figure>
-            <a href="https://photos.app.goo.gl/tRJGnkctCTrYcgWU6" target="_blank">
+            <a href="https://photos.google.com/album/AF1QipMJV6WzrhbnJibjtz4SqexHH99InSS88gKKoVEa" target="_blank">
                 <img src="https://lh3.googleusercontent.com/pw/AP1GczNMg_J64NrE9WdtkYeyid-PPC3CcKme4Na0H5-xozYsUEokoLYTbsJ04uD9DwYn-8Rd1wWxw3-9HomiFoP9m8Ermdnlj3hn3VGazb6SIAVxI1riKhs9e6G7tdTsnx29uOiKcyjBI03KnsX9t_DERv4u=w1367-h911-s-no-gm?authuser=0" alt="Papuga">
             </a>
             <figcaption>[2025-12-18] Wycieczka na Opera for Kids</figcaption>
         </figure>
 
         <figure>
-            <a href="https://photos.app.goo.gl/MBWxuWcqpWkqqZMW8" target="_blank">
+            <a href="https://photos.google.com/album/AF1QipO24P6cGQt4KZwrSOjnj8FmT1rYfY9d_lQY_uIT" target="_blank">
                 <img src="https://lh3.googleusercontent.com/pw/AP1GczPjCxTAUTLrH8aLqYST55RTlyYw32AlygL2cbRueJS4qhdGYmfaFNl4fmXkdrxhCDP0FYE3EXsqR8K4iyTh_2oO-f1UKHoDzTyCMChuBVMRgfvdvjJg7wTyM33z2qyXt6W_4N0pxk6mt4pbJZOLmvav=w1215-h911-s-no-gm?authuser=0" alt="Góra">
             </a>
             <figcaption>[2025-12-19] Wigilia klasowa 2025</figcaption>
         </figure>
     </div>
+</div>
+
+<script>
+const correctHash = "ec9dd61235107f77f8eade9b91d27ca121bd99ef6441b84c5977086a27e2a11c";
+
+async function sha256(text) {
+    const data = new TextEncoder().encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault(); // nie przeładowuj strony
+
+    const input = document.getElementById("password").value;
+    const hash = await sha256(input);
+
+    if (hash === correctHash) {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    } else {
+        document.getElementById("error").innerText = "Błędne hasło";
+    }
+});
+</script>
 </body>
 </html>
-
-
 
 
 
